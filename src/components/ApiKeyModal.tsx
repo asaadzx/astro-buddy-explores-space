@@ -34,9 +34,9 @@ const ApiKeyModal = ({ onSave, onClose, existingKey }: ApiKeyModalProps) => {
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Enter OpenAI API Key</DialogTitle>
+            <DialogTitle>Enter Google Gemini API Key</DialogTitle>
             <DialogDescription>
-              To chat with Astro Buddy, you'll need to provide an OpenAI API key. Your key is stored locally in your browser and is not sent to our servers.
+              To chat with Astro Buddy, you'll need to provide a Google Gemini API key. Your key is stored locally in your browser and is not sent to our servers.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -48,7 +48,7 @@ const ApiKeyModal = ({ onSave, onClose, existingKey }: ApiKeyModalProps) => {
                 id="apiKey"
                 value={apiKey}
                 onChange={(e) => setApiKey(e.target.value)}
-                placeholder="sk-..."
+                placeholder="AIzaSyA..."
                 className="col-span-4"
               />
             </div>

@@ -9,9 +9,11 @@ import Sun from "./Sun";
 interface SolarSystemProps {
   isPaused: boolean;
   speed: number;
+  showOrbits: boolean;
+  showLabels: boolean;
 }
 
-const SolarSystemContent = ({ isPaused, speed }: SolarSystemProps) => {
+const SolarSystemContent = ({ isPaused, speed, showOrbits, showLabels }: SolarSystemProps) => {
   // Use refs for animating planet positions
   const planetsRef = useRef<any[]>(Array(planetData.length).fill(null));
   const [selectedPlanet, setSelectedPlanet] = useState<string | null>(null);
@@ -58,7 +60,7 @@ const SolarSystemContent = ({ isPaused, speed }: SolarSystemProps) => {
       ))}
 
       {/* Orbit rings */}
-      {planetData.map((planet) => (
+      {showOrbits && planetData.map((planet) => (
         <mesh key={`orbit-${planet.name}`} rotation-x={Math.PI / 2}>
           <ringGeometry args={[planet.distanceFromSun, planet.distanceFromSun + 0.05, 64]} />
           <meshBasicMaterial color="#ffffff" opacity={0.1} transparent />

@@ -2,7 +2,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/components/ui/use-toast";
@@ -44,7 +43,7 @@ const ChatInterface = ({ apiKey, onRequestApiKey }: ChatInterfaceProps) => {
       onRequestApiKey();
       toast({
         title: "API Key Required",
-        description: "Please enter your OpenAI API key to chat with Astro Buddy.",
+        description: "Please enter your Google Gemini API key to chat with Astro Buddy.",
         variant: "destructive",
       });
       return;

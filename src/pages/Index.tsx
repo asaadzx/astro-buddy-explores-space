@@ -4,15 +4,18 @@ import SolarSystem from "../components/SolarSystem";
 import ControlPanel from "../components/ControlPanel";
 import ChatInterface from "../components/ChatInterface";
 import ApiKeyModal from "../components/ApiKeyModal";
+import SettingsPanel from "../components/SettingsPanel";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/toaster";
 
 const Index = () => {
   const [isPaused, setIsPaused] = useState(false);
   const [speed, setSpeed] = useState(1);
+  const [showOrbits, setShowOrbits] = useState(true);
+  const [showLabels, setShowLabels] = useState(true);
   const [showChat, setShowChat] = useState(false);
   const [apiKey, setApiKey] = useState<string | null>(
-    localStorage.getItem("openai_api_key")
+    localStorage.getItem("openai_api_key") || localStorage.getItem("gemini_api_key")
   );
   const [showApiKeyModal, setShowApiKeyModal] = useState(!apiKey);
 
@@ -29,7 +32,7 @@ const Index = () => {
   };
 
   const saveApiKey = (key: string) => {
-    localStorage.setItem("openai_api_key", key);
+    localStorage.setItem("gemini_api_key", key);
     setApiKey(key);
     setShowApiKeyModal(false);
   };
@@ -37,7 +40,12 @@ const Index = () => {
   return (
     <div className="relative h-screen w-full overflow-hidden bg-background">
       <div className="absolute inset-0 z-0">
-        <SolarSystem isPaused={isPaused} speed={speed} />
+        <SolarSystem 
+          isPaused={isPaused} 
+          speed={speed} 
+          showOrbits={showOrbits}
+          showLabels={showLabels}
+        />
       </div>
 
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10">
@@ -48,6 +56,15 @@ const Index = () => {
           onTogglePause={togglePause}
         />
       </div>
+
+      <SettingsPanel
+        speed={speed}
+        onSpeedChange={handleSpeedChange}
+        showOrbits={showOrbits}
+        onToggleOrbits={() => setShowOrbits(!showOrbits)}
+        showLabels={showLabels}
+        onToggleLabels={() => setShowLabels(!showLabels)}
+      />
 
       <div className="absolute top-4 right-4 z-10">
         <Button
