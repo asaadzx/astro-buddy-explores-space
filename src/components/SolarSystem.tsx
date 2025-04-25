@@ -22,27 +22,25 @@ const SolarSystemContent = ({
 }: SolarSystemProps) => {
   // Use refs for animating planet positions
   const planetsRef = useRef<any[]>(Array(planetData.length).fill(null));
-  const [cameraTarget, setCameraTarget] = useState<{ x: number, z: number } | null>(null);
+  const [cameraTarget, setCameraTarget] = useState<{ x: number, y: number, z: number } | null>(null);
   const [selectedPlanetName, setSelectedPlanetName] = useState<string | null>(null);
 
   useEffect(() => {
     if (selectedPlanet) {
       const planetIndex = planetData.findIndex(p => p.name === selectedPlanet);
-      if (planetIndex !== -1) {
-        const planet = planetData[planetIndex];
+      if (planetIndex !== -1 && planetsRef.current[planetIndex]) {
+        const planetPosition = planetsRef.current[planetIndex].position;
         setCameraTarget({ 
-          x: Math.cos((Math.PI * 2 * 0) / 8) * planet.distanceFromSun, 
-          z: Math.sin((Math.PI * 2 * 0) / 8) * planet.distanceFromSun 
+          x: planetPosition.x,
+          y: planetPosition.y + 2, // Slightly above the planet
+          z: planetPosition.z + 5  // Offset to view from a distance
         });
-        setSelectedPlanetName(selectedPlanet);
       }
     } else {
       setCameraTarget(null);
-      setSelectedPlanetName(null);
     }
   }, [selectedPlanet]);
 
-  // Animation frame
   useFrame(({ clock, camera }) => {
     if (isPaused) return;
 
@@ -58,14 +56,15 @@ const SolarSystemContent = ({
       planetsRef.current[index].position.x = x;
       planetsRef.current[index].position.z = z;
       
-      // Rotate the planet on its axis
       planetsRef.current[index].rotation.y += planet.rotationSpeed * 0.01 * speed;
     });
 
-    // Update camera position if a planet is selected
+    // Smooth camera movement to selected planet
     if (cameraTarget) {
-      camera.position.x += (cameraTarget.x - camera.position.x) * 0.02;
-      camera.position.z += (cameraTarget.z - camera.position.z) * 0.02;
+      camera.position.x += (cameraTarget.x - camera.position.x) * 0.05;
+      camera.position.y += (cameraTarget.y - camera.position.y) * 0.05;
+      camera.position.z += (cameraTarget.z - camera.position.z) * 0.05;
+      camera.lookAt(cameraTarget.x, 0, cameraTarget.z);
     }
   });
 
