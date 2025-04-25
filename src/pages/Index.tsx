@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SolarSystem from "../components/SolarSystem";
 import ControlPanel from "../components/ControlPanel";
 import ChatInterface from "../components/ChatInterface";
@@ -7,6 +7,7 @@ import ApiKeyModal from "../components/ApiKeyModal";
 import SettingsPanel from "../components/SettingsPanel";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/toaster";
+import { useToast } from "@/components/ui/use-toast";
 
 const Index = () => {
   const [isPaused, setIsPaused] = useState(false);
@@ -15,9 +16,21 @@ const Index = () => {
   const [showLabels, setShowLabels] = useState(true);
   const [showChat, setShowChat] = useState(false);
   const [apiKey, setApiKey] = useState<string | null>(
-    localStorage.getItem("openai_api_key") || localStorage.getItem("gemini_api_key")
+    localStorage.getItem("gemini_api_key")
   );
-  const [showApiKeyModal, setShowApiKeyModal] = useState(!apiKey);
+  const [showApiKeyModal, setShowApiKeyModal] = useState(false);
+  const { toast } = useToast();
+
+  // Check for API key on mount
+  useEffect(() => {
+    if (!apiKey) {
+      toast({
+        title: "API Key Required",
+        description: "You'll need to set your Google Gemini API key to use the chat feature",
+        duration: 5000,
+      });
+    }
+  }, []);
 
   const handleSpeedChange = (newSpeed: number) => {
     setSpeed(newSpeed);
@@ -29,12 +42,21 @@ const Index = () => {
 
   const toggleChat = () => {
     setShowChat(!showChat);
+    
+    if (showChat === false && !apiKey) {
+      setShowApiKeyModal(true);
+    }
   };
 
   const saveApiKey = (key: string) => {
     localStorage.setItem("gemini_api_key", key);
     setApiKey(key);
     setShowApiKeyModal(false);
+    toast({
+      title: "API Key Saved",
+      description: "Your Gemini API key has been saved",
+      duration: 3000,
+    });
   };
 
   return (

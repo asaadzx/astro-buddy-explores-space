@@ -1,7 +1,7 @@
 
 import { useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Stars, OrbitControls } from "@react-three/drei";
+import { Stars, OrbitControls, Text } from "@react-three/drei";
 import { planetData } from "../data/planetData";
 import Planet from "./Planet";
 import Sun from "./Sun";
@@ -56,12 +56,13 @@ const SolarSystemContent = ({ isPaused, speed, showOrbits, showLabels }: SolarSy
           planet={planet}
           isSelected={selectedPlanet === planet.name}
           onClick={() => setSelectedPlanet(selectedPlanet === planet.name ? null : planet.name)}
+          showLabel={showLabels}
         />
       ))}
 
       {/* Orbit rings */}
       {showOrbits && planetData.map((planet) => (
-        <mesh key={`orbit-${planet.name}`} rotation-x={Math.PI / 2}>
+        <mesh key={`orbit-${planet.name}`} rotation={[Math.PI / 2, 0, 0]}>
           <ringGeometry args={[planet.distanceFromSun, planet.distanceFromSun + 0.05, 64]} />
           <meshBasicMaterial color="#ffffff" opacity={0.1} transparent />
         </mesh>

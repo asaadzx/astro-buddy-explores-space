@@ -9,9 +9,10 @@ interface PlanetProps {
   planet: PlanetType;
   isSelected: boolean;
   onClick: () => void;
+  showLabel: boolean;
 }
 
-const Planet = forwardRef<THREE.Mesh, PlanetProps>(({ planet, isSelected, onClick }, ref) => {
+const Planet = forwardRef<THREE.Mesh, PlanetProps>(({ planet, isSelected, onClick, showLabel }, ref) => {
   const { name, size, color, hasRings } = planet;
   const ringRef = useRef<THREE.Mesh>(null);
 
@@ -46,16 +47,17 @@ const Planet = forwardRef<THREE.Mesh, PlanetProps>(({ planet, isSelected, onClic
         </mesh>
       )}
 
-      <Text
-        position={[0, size + 0.5, 0]}
-        fontSize={0.5}
-        color="white"
-        anchorX="center"
-        anchorY="middle"
-        font="/fonts/inter-var.woff2"
-      >
-        {name}
-      </Text>
+      {showLabel && (
+        <Text
+          position={[0, size + 0.5, 0]}
+          fontSize={0.5}
+          color="white"
+          anchorX="center"
+          anchorY="middle"
+        >
+          {name}
+        </Text>
+      )}
     </group>
   );
 });

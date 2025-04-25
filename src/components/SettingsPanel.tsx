@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Settings, X } from "lucide-react";
+import { Settings, X, Key } from "lucide-react";
+import ApiKeyModal from "./ApiKeyModal";
 
 interface SettingsPanelProps {
   speed: number;
@@ -25,6 +26,16 @@ const SettingsPanel = ({
   onToggleLabels,
 }: SettingsPanelProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showApiKeyModal, setShowApiKeyModal] = useState(false);
+  const [apiKey, setApiKey] = useState<string>(
+    localStorage.getItem("gemini_api_key") || ""
+  );
+
+  const handleSaveApiKey = (key: string) => {
+    localStorage.setItem("gemini_api_key", key);
+    setApiKey(key);
+    setShowApiKeyModal(false);
+  };
 
   return (
     <div className="absolute left-4 top-20 z-10">
@@ -87,8 +98,32 @@ const SettingsPanel = ({
                 onCheckedChange={onToggleLabels}
               />
             </div>
+
+            <div className="pt-2 border-t">
+              <Button 
+                variant="outline" 
+                className="w-full flex justify-between items-center"
+                onClick={() => setShowApiKeyModal(true)}
+              >
+                <span>Google Gemini API Key</span>
+                <Key className="h-4 w-4" />
+              </Button>
+              {apiKey && (
+                <p className="text-xs text-muted-foreground mt-1 text-center">
+                  API key is set
+                </p>
+              )}
+            </div>
           </CardContent>
         </Card>
+      )}
+
+      {showApiKeyModal && (
+        <ApiKeyModal
+          onSave={handleSaveApiKey}
+          onClose={() => setShowApiKeyModal(false)}
+          existingKey={apiKey}
+        />
       )}
     </div>
   );
