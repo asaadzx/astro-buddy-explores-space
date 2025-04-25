@@ -1,34 +1,31 @@
 
-import OpenAI from "openai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export const askAI = async (question: string, apiKey: string): Promise<string> => {
   try {
-    const openai = new OpenAI({
-      apiKey: apiKey,
-      dangerouslyAllowBrowser: true // Required for client-side usage
-    });
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content: "You are Astro Buddy, a friendly and knowledgeable AI assistant designed to teach young students about space and our solar system. Keep explanations simple and engaging, appropriate for elementary or middle school students. Your responses should be educational, accurate, and foster curiosity about space. Focus only on astronomical facts and related educational content. Be enthusiastic but scientifically accurate. Keep answers under 150 words."
-        },
+    const chat = model.startChat({
+      history: [
         {
           role: "user",
-          content: question
-        }
+          parts: [{ text: "You are Astro Buddy, a friendly and knowledgeable AI assistant designed to teach young students about space and our solar system. Keep explanations simple and engaging, appropriate for elementary or middle school students. Your responses should be educational, accurate, and foster curiosity about space. Focus only on astronomical facts and related educational content. Be enthusiastic but scientifically accurate. Keep answers under 150 words." }]
+        },
+        {
+          role: "model",
+          parts: [{ text: "I understand! I'll be Astro Buddy, your friendly space expert. I'll keep things fun and simple while sharing accurate facts about space and our solar system." }]
+        },
       ],
-      temperature: 0.7,
-      max_tokens: 300,
     });
 
-    return response.choices[0]?.message?.content || "I'm sorry, I couldn't generate a response.";
+    const result = await chat.sendMessage([{ text: question }]);
+    const response = await result.response;
+    return response.text() || "I'm sorry, I couldn't generate a response.";
   } catch (error: any) {
-    console.error("OpenAI API Error:", error);
-    if (error.response?.status === 401) {
-      throw new Error("Invalid API key. Please check your OpenAI API key and try again.");
+    console.error("Gemini API Error:", error);
+    if (error.status === 401) {
+      throw new Error("Invalid API key. Please check your Google API key and try again.");
     }
     throw error;
   }
