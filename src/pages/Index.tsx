@@ -1,10 +1,10 @@
-
 import { useState, useEffect } from "react";
 import SolarSystem from "../components/SolarSystem";
 import ControlPanel from "../components/ControlPanel";
 import ChatInterface from "../components/ChatInterface";
 import ApiKeyModal from "../components/ApiKeyModal";
 import SettingsPanel from "../components/SettingsPanel";
+import PlanetList from "../components/PlanetList";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
@@ -19,9 +19,9 @@ const Index = () => {
     localStorage.getItem("gemini_api_key")
   );
   const [showApiKeyModal, setShowApiKeyModal] = useState(false);
+  const [selectedPlanet, setSelectedPlanet] = useState<string | null>(null);
   const { toast } = useToast();
 
-  // Check for API key on mount
   useEffect(() => {
     if (!apiKey) {
       toast({
@@ -59,6 +59,10 @@ const Index = () => {
     });
   };
 
+  const handlePlanetSelect = (planetName: string) => {
+    setSelectedPlanet(planetName);
+  };
+
   return (
     <div className="relative h-screen w-full overflow-hidden bg-background">
       <div className="absolute inset-0 z-0">
@@ -67,6 +71,7 @@ const Index = () => {
           speed={speed} 
           showOrbits={showOrbits}
           showLabels={showLabels}
+          selectedPlanet={selectedPlanet}
         />
       </div>
 
@@ -118,7 +123,14 @@ const Index = () => {
           <span className="text-accent">Solar System</span>
         </h1>
       </div>
-      
+
+      <div className="absolute top-4 left-16 z-10">
+        <PlanetList 
+          apiKey={apiKey || ""} 
+          onSelectPlanet={handlePlanetSelect} 
+        />
+      </div>
+
       <Toaster />
     </div>
   );

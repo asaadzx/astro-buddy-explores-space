@@ -1,5 +1,4 @@
-
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Stars, OrbitControls, Text } from "@react-three/drei";
 import { planetData } from "../data/planetData";
@@ -11,15 +10,40 @@ interface SolarSystemProps {
   speed: number;
   showOrbits: boolean;
   showLabels: boolean;
+  selectedPlanet?: string | null;  // Add this prop
 }
 
-const SolarSystemContent = ({ isPaused, speed, showOrbits, showLabels }: SolarSystemProps) => {
+const SolarSystemContent = ({ 
+  isPaused, 
+  speed, 
+  showOrbits, 
+  showLabels, 
+  selectedPlanet 
+}: SolarSystemProps) => {
   // Use refs for animating planet positions
   const planetsRef = useRef<any[]>(Array(planetData.length).fill(null));
-  const [selectedPlanet, setSelectedPlanet] = useState<string | null>(null);
+  const [cameraTarget, setCameraTarget] = useState<{ x: number, z: number } | null>(null);
+  const [selectedPlanetName, setSelectedPlanetName] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (selectedPlanet) {
+      const planetIndex = planetData.findIndex(p => p.name === selectedPlanet);
+      if (planetIndex !== -1) {
+        const planet = planetData[planetIndex];
+        setCameraTarget({ 
+          x: Math.cos((Math.PI * 2 * 0) / 8) * planet.distanceFromSun, 
+          z: Math.sin((Math.PI * 2 * 0) / 8) * planet.distanceFromSun 
+        });
+        setSelectedPlanetName(selectedPlanet);
+      }
+    } else {
+      setCameraTarget(null);
+      setSelectedPlanetName(null);
+    }
+  }, [selectedPlanet]);
 
   // Animation frame
-  useFrame(({ clock }) => {
+  useFrame(({ clock, camera }) => {
     if (isPaused) return;
 
     const elapsedTime = clock.getElapsedTime();
@@ -37,6 +61,12 @@ const SolarSystemContent = ({ isPaused, speed, showOrbits, showLabels }: SolarSy
       // Rotate the planet on its axis
       planetsRef.current[index].rotation.y += planet.rotationSpeed * 0.01 * speed;
     });
+
+    // Update camera position if a planet is selected
+    if (cameraTarget) {
+      camera.position.x += (cameraTarget.x - camera.position.x) * 0.02;
+      camera.position.z += (cameraTarget.z - camera.position.z) * 0.02;
+    }
   });
 
   return (
@@ -54,8 +84,8 @@ const SolarSystemContent = ({ isPaused, speed, showOrbits, showLabels }: SolarSy
           key={planet.name}
           ref={el => planetsRef.current[index] = el}
           planet={planet}
-          isSelected={selectedPlanet === planet.name}
-          onClick={() => setSelectedPlanet(selectedPlanet === planet.name ? null : planet.name)}
+          isSelected={selectedPlanetName === planet.name}
+          onClick={() => setSelectedPlanetName(selectedPlanetName === planet.name ? null : planet.name)}
           showLabel={showLabels}
         />
       ))}
