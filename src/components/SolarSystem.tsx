@@ -41,7 +41,7 @@ const SolarSystemContent = ({ isPaused, speed, showOrbits, showLabels }: SolarSy
 
   return (
     <>
-      <ambientLight intensity={0.2} />
+      <ambientLight intensity={1.5} />
       <pointLight position={[0, 0, 0]} intensity={2} color="#FDB813" />
       <Stars radius={100} depth={50} count={5000} factor={4} fade speed={1} />
       
@@ -63,8 +63,8 @@ const SolarSystemContent = ({ isPaused, speed, showOrbits, showLabels }: SolarSy
       {/* Orbit rings */}
       {showOrbits && planetData.map((planet) => (
         <mesh key={`orbit-${planet.name}`} rotation={[Math.PI / 2, 0, 0]}>
-          <ringGeometry args={[planet.distanceFromSun, planet.distanceFromSun + 0.05, 64]} />
-          <meshBasicMaterial color="#ffffff" opacity={0.1} transparent />
+          <ringGeometry args={[planet.distanceFromSun, planet.distanceFromSun + -0.05, 64]} />
+          <meshBasicMaterial color="#ffffff" opacity={0.6} transparent />
         </mesh>
       ))}
     </>

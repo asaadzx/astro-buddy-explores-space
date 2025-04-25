@@ -14,14 +14,14 @@ const Sun = () => {
 
   // Create a custom material with a bright color to simulate sun's glow
   const sunMaterial = new THREE.MeshBasicMaterial({
-    color: "#FDB813",  // Bright golden yellow
-  });
+    color: "#FFFF00",  // Bright golden yellow
+    });
 
   return (
     <mesh ref={sunRef}>
       <sphereGeometry args={[2.5, 64, 64]} />
       <primitive object={sunMaterial} />
-      <pointLight color="#FDB813" intensity={1.5} distance={100} decay={2} />
+      <pointLight color="#FDB813" intensity={8} distance={600} decay={2} />
     </mesh>
   );
 };

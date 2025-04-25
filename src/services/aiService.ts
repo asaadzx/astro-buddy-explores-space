@@ -4,13 +4,13 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 export const askAI = async (question: string, apiKey: string): Promise<string> => {
   try {
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
     const chat = model.startChat({
       history: [
         {
           role: "user",
-          parts: [{ text: "You are Astro Buddy, a friendly and knowledgeable AI assistant designed to teach young students about space and our solar system. Keep explanations simple and engaging, appropriate for elementary or middle school students. Your responses should be educational, accurate, and foster curiosity about space. Focus only on astronomical facts and related educational content. Be enthusiastic but scientifically accurate. Keep answers under 150 words." }],
+          parts: [{ text: "You are Astro Buddy, a friendly and knowledproductgeable AI assistant designed to teach young students about space and our solar system. Keep explanations simple and engaging, appropriate for elementary or middle school students. Your responses should be educational, accurate, and foster curiosity about space. Focus only on astronomical facts and related educational content. Be enthusiastic but scientifically accurate. Keep answers under 150 words." }],
         },
         {
           role: "model",
