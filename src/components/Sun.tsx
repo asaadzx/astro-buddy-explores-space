@@ -12,15 +12,17 @@ const Sun = () => {
     }
   });
 
-  // Create a custom material with a bright color to simulate sun's glow
-  const sunMaterial = new THREE.MeshBasicMaterial({
-    color: "#FDB813",  // Bright golden yellow
-  });
-
   return (
     <mesh ref={sunRef}>
       <sphereGeometry args={[2.5, 64, 64]} />
-      <primitive object={sunMaterial} />
+      <meshBasicMaterial>
+        <color attach="value" args={["#FDB813"]} />
+        <gradientTexture
+          attach="map"
+          args={[["#FF4500", "#FDB813", "#FFD700"]]}
+          stops={[0, 0.5, 1]}
+        />
+      </meshBasicMaterial>
       <pointLight color="#FDB813" intensity={1.5} distance={100} decay={2} />
     </mesh>
   );
