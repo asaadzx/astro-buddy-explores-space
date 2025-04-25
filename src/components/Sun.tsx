@@ -12,11 +12,9 @@ const Sun = () => {
     }
   });
 
-  // Create a custom shader material with a gradient effect
+  // Create a custom material with a bright color to simulate sun's glow
   const sunMaterial = new THREE.MeshBasicMaterial({
-    color: "#FDB813",
-    emissive: "#FF4500",
-    emissiveIntensity: 0.5,
+    color: "#FDB813",  // Bright golden yellow
   });
 
   return (
