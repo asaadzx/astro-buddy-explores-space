@@ -44,7 +44,6 @@ Welcome to our interactive Solar System Simulator! This educational tool helps s
 Follow these steps:
 ## ✨ Key Features
 
-```sh
 # Step 1: Clone the repository using the project's Git URL.
 git clone <YOUR_GIT_URL>
 - 🪐 Accurate 3D models of planets and moons
