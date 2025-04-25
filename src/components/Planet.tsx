@@ -1,9 +1,8 @@
 
 import { forwardRef, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import * as THREE from "three";
-import { Text } from "@react-three/drei";
 import { PlanetType } from "../types/types";
+import { Text } from "@react-three/drei";
 
 interface PlanetProps {
   planet: PlanetType;
@@ -23,36 +22,36 @@ const Planet = forwardRef<THREE.Mesh, PlanetProps>(({ planet, isSelected, onClic
 
   return (
     <group>
+      {/* Planet sphere */}
       <mesh ref={ref} onClick={onClick}>
-        <sphereGeometry args={[size, 64, 64]} />
+        <sphereGeometry args={[size, 32, 32]} />
         <meshStandardMaterial 
-          color={color}
-          metalness={0.2}
-          roughness={0.8}
-          emissive={isSelected ? "white" : "black"}
+          color={color} 
+          emissive={isSelected ? "white" : "black"} 
           emissiveIntensity={isSelected ? 0.2 : 0}
         />
       </mesh>
 
+      {/* Saturn's rings */}
       {hasRings && (
         <mesh ref={ringRef} position={[0, 0, 0]}>
-          <ringGeometry args={[size + 0.5, size + 2, 64]} />
+          <ringGeometry args={[size + 0.5, size + 2, 32]} />
           <meshStandardMaterial 
-            color="#A49D88"
-            transparent
-            opacity={0.7}
-            side={THREE.DoubleSide}
+            color="#A49D88" 
+            side={2} 
+            transparent 
+            opacity={0.7} 
           />
         </mesh>
       )}
 
+      {/* Label */}
       <Text
         position={[0, size + 0.5, 0]}
         fontSize={0.5}
         color="white"
         anchorX="center"
         anchorY="middle"
-        font="/fonts/inter-var.woff2"
       >
         {name}
       </Text>

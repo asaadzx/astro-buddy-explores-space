@@ -1,7 +1,6 @@
 
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import * as THREE from "three";
 
 const Sun = () => {
   const sunRef = useRef<THREE.Mesh>(null);
@@ -14,15 +13,8 @@ const Sun = () => {
 
   return (
     <mesh ref={sunRef}>
-      <sphereGeometry args={[2.5, 64, 64]} />
-      <meshBasicMaterial>
-        <color attach="value" args={["#FDB813"]} />
-        <gradientTexture
-          attach="map"
-          args={[["#FF4500", "#FDB813", "#FFD700"]]}
-          stops={[0, 0.5, 1]}
-        />
-      </meshBasicMaterial>
+      <sphereGeometry args={[2.5, 32, 32]} />
+      <meshBasicMaterial color="#FDB813" />
       <pointLight color="#FDB813" intensity={1.5} distance={100} decay={2} />
     </mesh>
   );
